@@ -6,8 +6,9 @@ Infinity Toolkit is a collection of useful utilities simplifying development of 
 - [Mediator](#mediator) - A bare bones mediator test. (WIP)
 - [Logging formatter](#logging-formatter) - logging formatter with a Visual Studio Code inspired theme and Serilog like formatting
 
-## Feature Modules
-Let's you automatically register dependencies and endpoints in modules which simplifies development when you are working in feature slices.
+# Feature modules
+Infinity.Toolkit.FeatureModules is a library that simplifies development applications where you want to split functionality in different modules. It is especially useful when you are working with vertical slices in a modular monolith or application.
+However though, the library can be used in any type of application. It let's you automatically register dependencies and endpoints in modules which simplifies development when you are working in feature slices.
 
 ### Quick Start
 To get started with Feature Modules there are two options:
@@ -93,7 +94,7 @@ There are two types of feature modules:
 2. WebFeatureModule
 
 The difference is that the WebFeatureModule has access to the `IEndpointRouteBuilder` which allows you to map endpoints to the application.
-To create a web feature module, you need to create a class that inherits from `WebFeatureModule` and implement the `RegisterModule` and `MapEndpoints` methods.
+To create a web feature module, you need to create a class that inherits from `WebFeatureModule` or implements `IWebFeatureModule`. 
 
 # Mediator
 A simple mediator implementation that can be used to send messages between different parts of the application.
@@ -104,7 +105,7 @@ Currently this is a test using TPL Dataflow.
 A logging formatter that formats log messages with a Visual Studio Code inspired theme and Serilog like formatting.
 
 # Contributing
-If you have any ideas, suggestions or issues, please create an issue or a pull request. Or reach out to me on [Twitter](https://twitter.com/peternylander).
+If you have any ideas, suggestions or issues, please create an issue or a pull request. Or reach out to me on [BlueSky](https://bsky.app/profile/peternylander.bsky.social).
 
 # License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
