@@ -1,5 +1,4 @@
-﻿using Infinity.Toolkit.Tests.TestUtils;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Infinity.Toolkit.Tests.Messaging;
