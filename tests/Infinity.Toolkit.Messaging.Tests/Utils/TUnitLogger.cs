@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Infinity.Toolkit.Messaging.Tests.Utils;
 
-internal class XunitLogger(ITestOutputHelper testOutputHelper, LoggerExternalScopeProvider scopeProvider, string categoryName) : ILogger
+internal class TUnitLogger(LoggerExternalScopeProvider scopeProvider, string categoryName) : ILogger
 {
     private readonly LoggerExternalScopeProvider scopeProvider = scopeProvider;
     private readonly string categoryName = categoryName;
-    private readonly ITestOutputHelper testOutputHelper = testOutputHelper;
 
     public IDisposable? BeginScope<TState>(TState state)
         where TState : notnull
@@ -21,17 +20,19 @@ internal class XunitLogger(ITestOutputHelper testOutputHelper, LoggerExternalSco
             return;
         }
 
-        var message = formatter(state, exception);
-        try
+        var outputWriter = TestContext.Current?.OutputWriter;
+        var message = $"{categoryName}: {formatter(state, exception)}";
+        if (outputWriter is not null)
         {
-            testOutputHelper.WriteLine(message);
+            outputWriter.WriteLine(message);
         }
-        catch (Exception)
+        else
         {
+            Console.WriteLine(message);
         }
     }
 }
 
-internal sealed class XunitLogger<T>(ITestOutputHelper testOutputHelper, LoggerExternalScopeProvider scopeProvider) : XunitLogger(testOutputHelper, scopeProvider, typeof(T).Name), ILogger<T>
+internal sealed class TUnitLogger<T>(LoggerExternalScopeProvider scopeProvider) : TUnitLogger(scopeProvider, typeof(T).Name), ILogger<T>
 {
 }

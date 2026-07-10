@@ -2,11 +2,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Infinity.Toolkit.Messaging.Tests;
 
-public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
+public class MessageBusTests : TestBase
 {
-    private readonly ILogger<MessageBus> logger = XunitLoggerFactory.CreateLogger<MessageBus>(testOutputHelper);
+    private readonly ILogger<MessageBus> logger = TUnitLoggerFactory.CreateLogger<MessageBus>();
 
-    [Fact]
+    [Test]
     public async Task InitAsync_ShouldCallInitAsyncOnBroker()
     {
         // Arrange
@@ -21,7 +21,7 @@ public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
         broker.InitAsyncCallCount.ShouldBe(1);
     }
 
-    [Fact]
+    [Test]
     public async Task InitAsync_ShouldCallInitAsyncOnAllBrokers()
     {
         // Arrange
@@ -38,7 +38,7 @@ public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
         broker2.InitAsyncCallCount.ShouldBe(1);
     }
 
-    [Fact]
+    [Test]
     public async Task StartAsync_ShouldCallStartAsyncOnAllBrokers_WhenForceStartIsFalse()
     {
         // Arrange
@@ -55,7 +55,7 @@ public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
         broker2.StartAsyncCallCount.ShouldBe(0);
     }
 
-    [Fact]
+    [Test]
     public async Task StartAsync_ShouldCallStartAsyncOnAllBrokers_WhenForceStartIsTrue()
     {
         // Arrange
@@ -72,7 +72,7 @@ public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
         broker2.StartAsyncCallCount.ShouldBe(1);
     }
 
-    [Fact]
+    [Test]
     public async Task StartAsync_ShouldNotCallStartAsyncOnAnyBroker_WhenBrokerAutoStartListeningIsFalse()
     {
         // Arrange
@@ -89,7 +89,7 @@ public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
         broker2.StartAsyncCallCount.ShouldBe(0);
     }
 
-    [Fact]
+    [Test]
     public async Task StartAsync_ShouldCallStartAsyncOnSpecifiedBroker()
     {
         // Arrange
@@ -106,7 +106,7 @@ public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
         broker2.StartAsyncCallCount.ShouldBe(0);
     }
 
-    [Fact]
+    [Test]
     public async Task StopAsync_ShouldCallStopAsyncOnAllBrokers()
     {
         // Arrange
@@ -123,7 +123,7 @@ public class MessageBusTests(ITestOutputHelper testOutputHelper) : TestBase
         broker2.StopAsyncCallCount.ShouldBe(1);
     }
 
-    [Fact]
+    [Test]
     public async Task StopAsync_ShouldCallStopAsyncOnSpecifiedBroker()
     {
         // Arrange

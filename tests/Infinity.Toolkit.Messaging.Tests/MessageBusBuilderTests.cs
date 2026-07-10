@@ -2,11 +2,11 @@
 
 public class MessageBusBuilderTests : TestBase
 {
-    [Fact]
+    [Test]
     public void MapMessageHandler_Should_Succeed()
     {
         // Arrange
-        var services = Substitute.For<IServiceCollection>();
+        var services = new ServiceCollection();
         var messageBusBuilder = new MessageBusBuilder(services);
 
         // Act
@@ -16,11 +16,11 @@ public class MessageBusBuilderTests : TestBase
         result.ShouldNotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void AddBroker_Should_Succeed()
     {
         // Arrange
-        var services = Substitute.For<IServiceCollection>();
+        var services = new ServiceCollection();
         var messageBusBuilder = new MessageBusBuilder(services);
 
         // Act

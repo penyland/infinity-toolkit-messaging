@@ -5,9 +5,9 @@ namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
 public class MessageBusTests : TestBase
 {
-    public class IsProcessing(ITestOutputHelper testOutputHelper)
+    public class IsProcessing
     {
-        [Fact]
+        [Test]
         public async Task Is_True_When_Processing()
         {
             // Arrange
@@ -25,8 +25,7 @@ public class MessageBusTests : TestBase
                                 });
                            });
                     });
-                },
-                testOutputHelper);
+                });
 
             // Act
             var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
@@ -37,7 +36,7 @@ public class MessageBusTests : TestBase
             messageBus.IsProcessing.ShouldBeTrue();
         }
 
-        [Fact]
+        [Test]
         public async Task Is_False_When_Not_Processing()
         {
             // Arrange
@@ -55,8 +54,7 @@ public class MessageBusTests : TestBase
                             });
                         });
                     });
-                },
-                testOutputHelper);
+                });
 
             // Act
             var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
@@ -69,9 +67,9 @@ public class MessageBusTests : TestBase
         }
     }
 
-    public class StartAsync(ITestOutputHelper testOutputHelper)
+    public class StartAsync
     {
-        [Fact]
+        [Test]
         public async Task Should_Not_Throw_When_Already_Started()
         {
             // Arrange
@@ -89,8 +87,7 @@ public class MessageBusTests : TestBase
                             });
                         });
                     });
-                },
-                testOutputHelper);
+                });
 
             // Act
             var messageBus = serviceProvider.GetRequiredService<IMessageBus>();

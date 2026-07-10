@@ -2,7 +2,7 @@
 
 namespace Infinity.Toolkit.Messaging.Tests.Utils;
 
-public sealed class XunitLoggerFactory(ITestOutputHelper testOutputHelper) : ILoggerFactory
+public sealed class TUnitLoggerFactory : ILoggerFactory
 {
     private readonly LoggerExternalScopeProvider scopeProvider = new();
 
@@ -13,17 +13,17 @@ public sealed class XunitLoggerFactory(ITestOutputHelper testOutputHelper) : ILo
 
     public ILogger CreateLogger(string categoryName)
     {
-        return new XunitLogger(testOutputHelper, scopeProvider, categoryName);
+        return new TUnitLogger(scopeProvider, categoryName);
     }
 
     public void Dispose()
     {
     }
 
-    public static ILogger<T> CreateLogger<T>(ITestOutputHelper testOutputHelper)
+    public static ILogger<T> CreateLogger<T>()
     {
         var loggerFactory = new LoggerFactory();
-        loggerFactory.AddProvider(new XUnitLoggerProvider(testOutputHelper));
+        loggerFactory.AddProvider(new TUnitLoggerProvider());
         return loggerFactory.CreateLogger<T>();
     }
 }

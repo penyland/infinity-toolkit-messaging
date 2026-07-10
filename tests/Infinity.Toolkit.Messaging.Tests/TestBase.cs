@@ -6,22 +6,12 @@ namespace Infinity.Toolkit.Messaging.Tests;
 
 public class TestBase
 {
-    public static ServiceProvider ConfigureServiceProvider(Action<IServiceCollection> configure, ITestOutputHelper testOutputHelper)
-    {
-        var services = new ServiceCollection();
-        services.AddLogging(loggingBuilder => loggingBuilder.AddXunit(testOutputHelper));
-        services.AddMetrics();
-        services.AddSingleton(CreateConfiguration([]));
-
-        configure(services);
-        return services.BuildServiceProvider();
-    }
-
     public static ServiceProvider ConfigureServiceProvider(Action<IServiceCollection> configure)
     {
         var services = new ServiceCollection();
-        services.AddLogging();
+        services.AddLogging(loggingBuilder => loggingBuilder.AddTUnit());
         services.AddMetrics();
+        services.AddSingleton(CreateConfiguration([]));
 
         configure(services);
         return services.BuildServiceProvider();

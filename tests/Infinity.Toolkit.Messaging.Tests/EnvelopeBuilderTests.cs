@@ -11,7 +11,7 @@ public class EnvelopeBuilderTests
             Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "TEST");
         }
 
-        [Fact]
+        [Test]
         public void Should_Return_An_Envelope()
         {
             // Arrange
@@ -22,7 +22,7 @@ public class EnvelopeBuilderTests
             envelope.ShouldNotBeNull();
         }
 
-        [Fact]
+        [Test]
         public void With_Invalid_EventType_Should_Fail()
         {
             // Arrange
@@ -35,7 +35,7 @@ public class EnvelopeBuilderTests
             func.ShouldThrow<ArgumentNullException>();
         }
 
-        [Fact]
+        [Test]
         public void WithBody_Should_Contain_Expected_Value()
         {
             // Arrange
@@ -54,7 +54,7 @@ public class EnvelopeBuilderTests
             content.ShouldBe("testContent");
         }
 
-        [Fact]
+        [Test]
         public void Envelope_Should_Contain_Expected_CloudEvent_Property_SpecVersion()
         {
             // Arrange
@@ -65,7 +65,7 @@ public class EnvelopeBuilderTests
             envelope.ApplicationProperties[CloudEvents.SpecVersion].ShouldBe(CloudEvents.CloudEventsSpecVersion);
         }
 
-        [Fact]
+        [Test]
         public void Message_Should_Contain_Expected_CloudEvent_Property_Type()
         {
             // Arrange
@@ -83,7 +83,7 @@ public class EnvelopeBuilderTests
             type.ShouldNotBeNull();
         }
 
-        [Fact]
+        [Test]
         public void Message_Should_Contain_Expected_CloudEvent_Property_CorrelationId()
         {
             // Arrange
@@ -100,7 +100,7 @@ public class EnvelopeBuilderTests
             envelope.CorrelationId.ShouldBe("correlationId");
         }
 
-        [Fact]
+        [Test]
         public void Message_Should_Contain_Expected_CloudEvent_Property_Id()
         {
             // Arrange
@@ -116,7 +116,7 @@ public class EnvelopeBuilderTests
             Guid.TryParse(envelope.MessageId, out var guid).ShouldBeTrue();
         }
 
-        [Fact]
+        [Test]
         public void Message_Should_Contain_Expected_CloudEvent_Property_Source()
         {
             // Arrange
@@ -138,7 +138,7 @@ public class EnvelopeBuilderTests
             source?.Host.ShouldBe("test");
         }
 
-        [Fact]
+        [Test]
         public void With_PropertyBag_Should_Contain_Expected_Values()
         {
             // Arrange
@@ -159,7 +159,7 @@ public class EnvelopeBuilderTests
             envelope.ApplicationProperties.ShouldContainKeyAndValue("key2", "value2");
         }
 
-        [Fact]
+        [Test]
         public void MessageBody_Should_Contain_PascalCased_Property_Name()
         {
             // Arrange
@@ -173,7 +173,7 @@ public class EnvelopeBuilderTests
             envelope.Body.ToString().Contains("Content");
         }
 
-        [Fact]
+        [Test]
         public void MessageBody_Should_Contain_CamelCased_Property_Name()
         {
             // Arrange
@@ -188,7 +188,7 @@ public class EnvelopeBuilderTests
             envelope.Body.ToString().Contains("content");
         }
 
-        [Fact]
+        [Test]
         public void MessageBody_Should_Contain_CamelCased_Property_Name_And_Expected_CloudEvent_Property_CorrelationId()
         {
             // Arrange
@@ -205,7 +205,7 @@ public class EnvelopeBuilderTests
             envelope.CorrelationId.ShouldBe("correlationId");
         }
 
-        [Fact]
+        [Test]
         public void MessageBody_Should_Contain_CamelCased_Property_Name_And_PropertyBag_Contains_Expected_Values()
         {
             // Arrange

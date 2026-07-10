@@ -4,13 +4,13 @@ namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
 public class InMemoryChannelProcessor : TestBase
 {
-    public class StartProcessingAsync(ITestOutputHelper testOutputHelper)
+    public class StartProcessingAsync
     {
-        [Fact]
+        [Test]
         public async Task Should_SucceedAsync()
         {
             // Arrange
-            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new XunitLoggerFactory(testOutputHelper));
+            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new TUnitLoggerFactory());
 
             var processor = client.GetChannelProcessor("testChannel");
             processor.ProcessMessageAsync = async (args) => { await Task.CompletedTask; };
@@ -22,11 +22,11 @@ public class InMemoryChannelProcessor : TestBase
             processor.IsProcessing.ShouldBeTrue();
         }
 
-        [Fact]
+        [Test]
         public async Task ProcessMessageAsync_Must_Be_Set()
         {
             // Arrange
-            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new XunitLoggerFactory(testOutputHelper));
+            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new TUnitLoggerFactory());
 
             var processor = client.GetChannelProcessor("testChannel");
 
@@ -37,11 +37,11 @@ public class InMemoryChannelProcessor : TestBase
             await action.ShouldThrowAsync<InvalidOperationException>();
         }
 
-        [Fact]
+        [Test]
         public async Task MultipleCalls_Should_Fail_Async()
         {
             // Arrange
-            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new XunitLoggerFactory(testOutputHelper));
+            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new TUnitLoggerFactory());
 
             var processor = client.GetChannelProcessor("testChannel");
             processor.ProcessMessageAsync = async (args) => { await Task.CompletedTask; };
@@ -56,11 +56,11 @@ public class InMemoryChannelProcessor : TestBase
             processor.IsProcessing.ShouldBeTrue();
         }
 
-        [Fact]
+        [Test]
         public async Task When_Cancelled_Should_Not_Be_Processing()
         {
             // Arrange
-            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new XunitLoggerFactory(testOutputHelper));
+            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new TUnitLoggerFactory());
 
             var processor = client.GetChannelProcessor("testChannel");
             processor.ProcessMessageAsync = async (args) => { await Task.CompletedTask; };
@@ -77,13 +77,13 @@ public class InMemoryChannelProcessor : TestBase
         }
     }
 
-    public class StopProcessingAsync(ITestOutputHelper testOutputHelper)
+    public class StopProcessingAsync
     {
-        [Fact]
+        [Test]
         public async Task Should_SucceedAsync()
         {
             // Arrange
-            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new XunitLoggerFactory(testOutputHelper));
+            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new TUnitLoggerFactory());
 
             var processor = client.GetChannelProcessor("testChannel");
             processor.ProcessMessageAsync = async (args) => { await Task.CompletedTask; };
@@ -96,11 +96,11 @@ public class InMemoryChannelProcessor : TestBase
             processor.IsProcessing.ShouldBeFalse();
         }
 
-        [Fact]
+        [Test]
         public async Task MultipleCalls_Should_Not_Fail()
         {
             // Arrange
-            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new XunitLoggerFactory(testOutputHelper));
+            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new TUnitLoggerFactory());
 
             var processor = client.GetChannelProcessor("testChannel");
             processor.ProcessMessageAsync = async (args) => { await Task.CompletedTask; };
@@ -115,11 +115,11 @@ public class InMemoryChannelProcessor : TestBase
             processor.IsProcessing.ShouldBeFalse();
         }
 
-        [Fact]
+        [Test]
         public async Task Should_Throw_When_Cancelled()
         {
             // Arrange
-            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new XunitLoggerFactory(testOutputHelper));
+            var client = new InMemoryChannelClientFactory(new SequenceNumberGenerator(), new TUnitLoggerFactory());
 
             var processor = client.GetChannelProcessor("testChannel");
             processor.ProcessMessageAsync = async (args) => { await Task.CompletedTask; };

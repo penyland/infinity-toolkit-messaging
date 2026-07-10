@@ -5,12 +5,9 @@ using System.Diagnostics;
 
 namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
-public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
+public class InMemoryBus : TestBase
 {
-    private readonly ITestOutputHelper testOutputHelper = testOutputHelper;
-    private Activity activity = new Activity("unitTest").Start();
-
-    [Fact]
+    [Test]
     public async Task Should_Process_Message_Successfully()
     {
         // Arrange
@@ -27,7 +24,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
                     .AddChannelProducer<TestMessage>(options => { options.ChannelName = "test"; });
                 })
                 .MapMessageHandler<TestMessage, TestMessageHandler>();
-            }, testOutputHelper);
+            });
 
         ObservedMessageContexts results;
 
@@ -45,7 +42,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
         results.IncomingMessageContexts.ShouldHaveSingleItem();
     }
 
-    [Fact]
+    [Test]
     public async Task Should_Invoke_ExceptionHandler()
     {
         // Arrange
@@ -68,7 +65,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
                 .AddExceptionHandler<TestExceptionHandler2>();
 
                 services.AddScoped<TestExceptionHandlerData>();
-            }, testOutputHelper);
+            });
 
         // Act
         var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
@@ -83,11 +80,9 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
         testExceptionHandlerData.Handled.ShouldBeTrue();
     }
 
-    public class ProcessErrorAsync(ITestOutputHelper testOutputHelper)
+    public class ProcessErrorAsync
     {
-        private readonly ITestOutputHelper testOutputHelper = testOutputHelper;
-
-        [Fact]
+        [Test]
         public async Task Should_Use_DefaultExceptionHandlerAsync()
         {
             // Arrange
@@ -95,8 +90,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
                 services =>
                 {
                     services.AddInfinityMessaging().ConfigureInMemoryBus();
-                },
-                testOutputHelper);
+                });
 
             // Act
             var bus = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
@@ -108,7 +102,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
             exception.Message.ShouldBe("Test");
         }
 
-        [Fact]
+        [Test]
         public async Task Should_Call_Registered_ErrorHandlerAsync()
         {
             // Arrange
@@ -120,8 +114,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
                     .AddInfinityMessaging()
                         .ConfigureInMemoryBus()
                         .AddExceptionHandler(testExceptionHandler);
-            },
-            testOutputHelper);
+            });
 
             // Act
             var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
@@ -135,7 +128,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
             await testExceptionHandler.Received().TryHandleAsync("Test", Arg.Any<Exception>());
         }
 
-        [Fact]
+        [Test]
         public async Task With_Multiple_ExceptionHandler_Should_Be_Called_In_OrderAsync()
         {
             // Arrange
@@ -147,8 +140,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
                         .AddInfinityMessaging()
                             .ConfigureInMemoryBus()
                             .AddExceptionHandler(testExceptionHandler1)
-                            .AddExceptionHandler(testExceptionHandler2),
-                testOutputHelper);
+                            .AddExceptionHandler(testExceptionHandler2));
 
             // Act
             var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
