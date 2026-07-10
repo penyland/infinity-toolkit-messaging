@@ -14,6 +14,10 @@ dotnet build --configuration Release --no-restore
 dotnet test
 dotnet test tests/Infinity.Toolkit.Messaging.Tests/Infinity.Toolkit.Messaging.Tests.csproj
 
+# Alternative test execution (Microsoft Testing Platform executable test project)
+dotnet run --project tests/Infinity.Toolkit.Messaging.Tests/Infinity.Toolkit.Messaging.Tests.csproj -- --disable-logo
+dotnet run --project tests/Infinity.Toolkit.Messaging.Tests/Infinity.Toolkit.Messaging.Tests.csproj --configuration Release -- --disable-logo
+
 # Run a single test (TUnit UID-based filter)
 dotnet test --project tests/Infinity.Toolkit.Messaging.Tests/Infinity.Toolkit.Messaging.Tests.csproj -- --filter-uid "Infinity.Toolkit.Messaging.Tests.MessageBusBuilderTests.1.1.AddBroker_Should_Succeed.1.1.0"
 
@@ -27,6 +31,7 @@ dotnet pack --configuration Release -p:IncludeSymbols=true -p:SymbolPackageForma
 - Solution file: `Infinity.Toolkit.Messaging.slnx`
 - CI baseline (see `.github/workflows/nuget-publish.yml`): `dotnet build --configuration Release --no-restore` and `dotnet test --configuration Release --no-build`
 - There is no separate lint command; analyzer/style enforcement happens through `dotnet build` with warnings treated as errors (`Directory.Build.props`).
+- Because tests run on Microsoft Testing Platform, `dotnet run` from the test project is also a valid way to execute tests.
 
 ## High-level architecture
 
