@@ -6,9 +6,9 @@ namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
 public class InMemoryChannelProducerTests : TestBase
 {
-    public class SendAsync(ITestOutputHelper testOutputHelper)
+    public class SendAsync
     {
-        [Fact]
+        [Test]
         public async Task Should_SucceedAsync()
         {
             // Arrange
@@ -17,7 +17,7 @@ public class InMemoryChannelProducerTests : TestBase
             });
 
             var sequenceNumberGenerator = new SequenceNumberGenerator();
-            var clientFactory = new InMemoryChannelClientFactory(sequenceNumberGenerator, new XunitLoggerFactory(testOutputHelper));
+            var clientFactory = new InMemoryChannelClientFactory(sequenceNumberGenerator, new TUnitLoggerFactory());
 
             var channelProducerOptions = new TestOptionsMonitor<InMemoryChannelProducerOptions>(new InMemoryChannelProducerOptions()
             {

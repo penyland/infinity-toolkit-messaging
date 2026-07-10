@@ -2,7 +2,7 @@
 
 public class MessageBusBuilderTests : TestBase
 {
-    [Fact]
+    [Test]
     public void MapMessageHandler_Should_Succeed()
     {
         // Arrange
@@ -16,7 +16,7 @@ public class MessageBusBuilderTests : TestBase
         result.ShouldNotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void AddBroker_Should_Succeed()
     {
         // Arrange
