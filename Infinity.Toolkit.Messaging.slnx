@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/MessagingSample/MessagingSample.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Infinity.Toolkit.Messaging.AzureServiceBus/Infinity.Toolkit.Messaging.AzureServiceBus.csproj" />
+    <Project Path="src/Infinity.Toolkit.Messaging/Infinity.Toolkit.Messaging.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Infinity.Toolkit.Messaging.Tests/Infinity.Toolkit.Messaging.Tests.csproj" />
+  </Folder>
+</Solution>

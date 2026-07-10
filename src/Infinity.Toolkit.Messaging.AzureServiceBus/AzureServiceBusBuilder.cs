@@ -167,11 +167,15 @@ public static class AzureServiceBusBuilderExtensions
     }
 
     /// <summary>
-    /// Adds a transient deferred channel consumer that can consume deferred messages of the type <typeparamref name="TEventType"/> from the Azure Service Bus.
+    /// Adds a transient deferred channel consumer that can consume deferred messages of the type
+    /// <typeparamref name="TEventType"/> from the Azure Service Bus.
     /// </summary>
     /// <typeparam name="TEventType">The type of the message.</typeparam>
+    /// <param name="builder">The <see cref="AzureServiceBusBuilder"/>.</param>
     /// <param name="configureChannelOptions">A delegate that can be used to configure the channel options.</param>
-    /// <returns>An <see cref="AzureServiceBusBuilder"/> that can be used to further configure the Azure Service Bus.</returns>
+    /// <returns>
+    /// An <see cref="AzureServiceBusBuilder"/> that can be used to further configure the Azure Service Bus.
+    /// </returns>
     public static AzureServiceBusBuilder AddDeferredChannelConsumer<TEventType>(this AzureServiceBusBuilder builder, Action<AzureServiceBusDeferredChannelConsumerOptions> configureChannelOptions)
         where TEventType : class
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Infinity.Toolkit.Tests.Messaging;
+namespace Infinity.Toolkit.Messaging.Tests;
 
 public record TestMessage(string Content);
 

@@ -1,6 +1,6 @@
 ﻿using Infinity.Toolkit.Messaging.InMemory;
 
-namespace Infinity.Toolkit.Tests.Messaging.InMemory;
+namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
 public class InMemoryChannelReceiverTests : TestBase
 {
@@ -11,8 +11,10 @@ public class InMemoryChannelReceiverTests : TestBase
         {
             // Arrange
             var receiver = new InMemoryChannelReceiver("testChannel", new XunitLoggerFactory(testOutputHelper));
-            var testMessage = new InMemoryMessage("testMessage");
-            testMessage.SequenceNumber = 1;
+            var testMessage = new InMemoryMessage("testMessage")
+            {
+                SequenceNumber = 1
+            };
 
             // Act
             var sequenceNumber = await receiver.DeferMessageAsync(testMessage, cancellationToken: CancellationToken.None);
@@ -26,8 +28,10 @@ public class InMemoryChannelReceiverTests : TestBase
         {
             // Arrange
             var receiver = new InMemoryChannelReceiver("testChannel", new XunitLoggerFactory(testOutputHelper));
-            var testMessage = new InMemoryMessage("testMessage");
-            testMessage.SequenceNumber = 1;
+            var testMessage = new InMemoryMessage("testMessage")
+            {
+                SequenceNumber = 1
+            };
 
             // Act
             var sequenceNumber = await receiver.DeferMessageAsync(testMessage, cancellationToken: CancellationToken.None);
@@ -45,8 +49,10 @@ public class InMemoryChannelReceiverTests : TestBase
         {
             // Arrange
             var receiver = new InMemoryChannelReceiver("testChannel", new XunitLoggerFactory(testOutputHelper));
-            var testMessage = new InMemoryMessage("testMessage");
-            testMessage.SequenceNumber = 1;
+            var testMessage = new InMemoryMessage("testMessage")
+            {
+                SequenceNumber = 1
+            };
 
             // Act
             await receiver.DeferMessageAsync(testMessage, cancellationToken: CancellationToken.None);
@@ -96,8 +102,10 @@ public class InMemoryChannelReceiverTests : TestBase
         {
             // Arrange
             var receiver = new InMemoryChannelReceiver("testChannel", new XunitLoggerFactory(testOutputHelper));
-            var testMessage = new InMemoryMessage("testMessage");
-            testMessage.SequenceNumber = 1;
+            var testMessage = new InMemoryMessage("testMessage")
+            {
+                SequenceNumber = 1
+            };
 
             // Act
             var sequenceNumber = await receiver.DeferMessageAsync(testMessage, cancellationToken: CancellationToken.None);
@@ -114,8 +122,10 @@ public class InMemoryChannelReceiverTests : TestBase
         {
             // Arrange
             var receiver = new InMemoryChannelReceiver("testChannel", new XunitLoggerFactory(testOutputHelper));
-            var testMessage = new InMemoryMessage("testMessage");
-            testMessage.SequenceNumber = 1;
+            var testMessage = new InMemoryMessage("testMessage")
+            {
+                SequenceNumber = 1
+            };
 
             // Act
             var sequenceNumber = await receiver.DeferMessageAsync(testMessage, cancellationToken: CancellationToken.None);

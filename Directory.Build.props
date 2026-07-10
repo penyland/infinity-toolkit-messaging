@@ -4,6 +4,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;NU1505</NoWarn>
+    <RootNamespace>Infinity.Toolkit.Messaging</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,7 +15,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Copyright>Copyright © $([System.DateTime]::Now.Year) Peter Nylander </Copyright>
   </PropertyGroup>
-    
+
   <PropertyGroup>
     <ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
     <EnableSdkContainerSupport>false</EnableSdkContainerSupport>

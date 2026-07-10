@@ -1,4 +1,4 @@
-﻿namespace Infinity.Toolkit.Tests.Messaging;
+﻿namespace Infinity.Toolkit.Messaging.Tests;
 
 public class MessageBusBuilderTests : TestBase
 {

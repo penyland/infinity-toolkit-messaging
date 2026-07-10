@@ -177,6 +177,7 @@ public static class InMemoryBusBuilderExtensions
     /// Adds a transient deferred channel consumer that can consume deferred messages of the type <typeparamref name="TEventType"/> from the InMemoryBroker.
     /// </summary>
     /// <typeparam name="TEventType">The type of the message.</typeparam>
+    /// <param name="builder">The <see cref="InMemoryBusBuilder"/>.</param>
     /// <param name="configureChannelOptions">A delegate that can be used to configure the channel options.</param>
     /// <returns>An <see cref="InMemoryBusBuilder"/> that can be used to further configure the InMemoryBroker.</returns>
     public static InMemoryBusBuilder AddDeferredChannelConsumer<TEventType>(this InMemoryBusBuilder builder, Action<InMemoryDeferredChannelConsumerOptions> configureChannelOptions)

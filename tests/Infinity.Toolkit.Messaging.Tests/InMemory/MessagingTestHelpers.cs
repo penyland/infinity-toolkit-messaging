@@ -1,7 +1,7 @@
 ﻿using Infinity.Toolkit.Messaging.Abstractions;
 using System.Diagnostics;
 
-namespace Infinity.Toolkit.Tests.Messaging.InMemory;
+namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
 internal static class MessagingTestHelpers
 {
@@ -9,12 +9,14 @@ internal static class MessagingTestHelpers
         Func<Task> testAction,
         TimeSpan? timeout = null)
         where T : class
-            => SendAndWaitForEvent<T>(
-                testAction,
-                m => m.MessageType == typeof(T),
-                timeout);
+    {
+        return SendAndWaitForEventAsync<T>(
+                    testAction,
+                    m => m.MessageType == typeof(T),
+                    timeout);
+    }
 
-    public static async Task<ObservedMessageContexts> SendAndWaitForEvent<T>(
+    public static async Task<ObservedMessageContexts> SendAndWaitForEventAsync<T>(
         Func<Task> testAction,
         Func<IMessageHandlerContext<T>, bool> predicate,
         TimeSpan? timeout = null)

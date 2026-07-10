@@ -1,6 +1,6 @@
 ﻿using Infinity.Toolkit.Messaging.Abstractions;
 
-namespace Infinity.Toolkit.Tests.Messaging;
+namespace Infinity.Toolkit.Messaging.Tests;
 
 public class TestMessageHandler(IServiceProvider serviceProvider) : IMessageHandler<TestMessage>
 {

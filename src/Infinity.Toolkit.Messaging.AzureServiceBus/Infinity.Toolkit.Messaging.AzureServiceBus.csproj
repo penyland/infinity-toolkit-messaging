@@ -10,12 +10,12 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <InternalsVisibleTo Include="Infinity.Toolkit.Tests" />
+    <InternalsVisibleTo Include="Infinity.Toolkit.Messaging.Tests" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.21.0" />
-    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.2" />
   </ItemGroup>
 
   <ItemGroup>

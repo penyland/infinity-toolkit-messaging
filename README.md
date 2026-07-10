@@ -1,25 +1,16 @@
-# infinity-toolkit
-Infinity Toolkit is a collection of useful nuget-packages simplifying development of modular monoliths and applications using vertical slice architecture.
+# Infinity.Toolkit.Messaging
+Infinity Toolkit Messaging is a no frills messaging lightweight library with a super simple API. It can be used to send messages between different parts of the application.
+The library is built with simplicity in mind and is designed to be easy to use and easy to understand.
+The nomenclature is following Async API and the library is built with the idea of being able to easily integrate with any messaging system such as Azure Service Bus, RabbitMQ, Kafka etc.
 
 ## Features
-- [Feature modules](#feature-modules) - Let's you automatically register dependencies and endpoints in modules which simplifies development when you are working in feature slices.
-- [Result type](#result-type) - A simple Result type for handling success and failure in a functional way.
-- [Handlers](#handlers) - A simple way to create handlers for commands and queries.
-- [Logging formatter](#logging-formatter) - logging formatter with a Visual Studio Code inspired theme and Serilog like formatting
-- OpenApi document transformers - Simplifying setting up security schemes.
-- Messaging framework - A simple messaging framework for sending and listening to messages. Supports in-memory and Azure Service Bus.
-- [Infinity.Toolkit.Azure](#Infinity.Toolkit.Azure) - Utilities for working with Azure. 
-  - TokenCredentialHelper - Helps creating a ChainedTokenCredential used to authenticate with Azure services.
-  - Simplifying setup and configuring Azure App Configuration.
-- And more to come...
+- An Async API inspired API.
+- An In-Memory message bus
+- Azure Service Bus integration
 
-# Feature modules
-Infinity.Toolkit.FeatureModules is a library that simplifies development applications where you want to split functionality in different modules. It is especially useful when you are working with vertical slices in a modular monolith or application.
-However though, the library can be used in any type of application. It let's you automatically register dependencies and endpoints in modules which simplifies development when you are working in feature slices.
-
-## Quick Start
-To get started with Feature Modules there are two options:
-1. Look at the sample project in the repository. The sample project found here [FeatureModulesSample](samples/FeatureModulesSample) is a simple web api with two feature modules.
+### Quick Start
+To get started with Infinity.Toolkit.Messaging follow these steps:
+1. Look at the sample project in the repository. The sample project found here [MessagingSample](samples/MessagingSample) is a simple web api that demonstrates how to use the library.
 2. Create a new project and integrate the library.
 
 Let's look create a new project and integrate the library.
@@ -28,105 +19,105 @@ Let's look create a new project and integrate the library.
 dotnet new webapi -n MyWebApi
 ```
 
-2. Add the Infinity.Toolkit.FeatureModules package to the project.
+2. Add the Infinity.Toolkit.Messaging package to the project.
 ```bash
-dotnet add package Infinity.Toolkit
+dotnet add package Infinity.Toolkit.Messaging
 ```
 
-3. In Program.cs, add the following code:
+3. Start by creating a message class that will be sent between different parts of the application. For this sample let's reuse the WeatherForecast class from the sample project.
 ```csharp
-using Infinity.Toolkit.FeatureModules;
-
-var builder = WebApplication.CreateBuilder(args);
-builder.AddFeatureModules();
-
-var app = builder.Build();
-
-app.MapFeatureModules();
-app.Run();
-```
-
-This will add all feature modules added to the project and add the modules services to the application. The `MapFeatureModules` method will map all endpoints to the application.
-
-4. Run the application and make sure that it is working. The application should return a 404 error since there are no endpoints mapped to the application.
-
-### Create a feature module
-1. Create a new class called WeatherModule.cs in the root of the project. Make sure to remove the endpoint that was created by the template. Add the following code to the WeatherModule.cs file.
-
-```csharp
-internal class WeatherModule : WebFeatureModule
-{
-    public override IModuleInfo? ModuleInfo { get; } = new FeatureModuleInfo("WeatherModule", "1.0.0");
-
-    public override void MapEndpoints(WebApplication app)
-    {
-
-        var summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        app.MapGet("/weatherforecast", () =>
-        {
-            var forecast =  Enumerable.Range(1, 5).Select(index =>
-            new WeatherForecast
-            (
-                DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                Random.Shared.Next(-20, 55),
-                summaries[Random.Shared.Next(summaries.Length)]
-            )).ToArray();
-
-            return forecast;
-        })
-        .WithName("GetWeatherForecast")
-        .WithOpenApi();
-    }
-}
-
 internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 ```
 
-2. Run the application and navigate to the /weatherforecast endpoint. You should see the weather forecast.
+4. Create a message handler that will handle the message. The message handler should implement the `IMessageHandler<TMessage>` interface.
+```csharp
+internal class WeatherForecastHandler : IMessageHandler<WeatherForecast>
+{
+    public Task HandleAsync(WeatherForecast message, CancellationToken cancellationToken)
+    {
+        Console.WriteLine($"Received message: {message.Summary}");
+        return Task.CompletedTask;
+    }
+}
+```
 
-### Feature modules in a class library
-The sample project also refers to a class library with another [feature module](samples/FeatureModulesSample.Module1). When you add the class library to the project, the feature module will be automatically registered and the endpoints will be mapped to the application.
+4. Now it's time to add and configure the message bus. First add the message bus to the services collection in the `Program.cs` file.
+```csharp
+using Infinity.Toolkit.Messaging;
 
-### Types of feature modules
+var builder = WebApplication.CreateBuilder(args);
+builder.AddInfinityMessaging();
 
-There are two types of feature modules:
-1. FeatureModule
-2. WebFeatureModule
+var app = builder.Build();
+...
+```
 
-The difference is that the WebFeatureModule has access to `WebApplication` which allows you to map endpoints to the application.
-To create a web feature module, you need to create a class that inherits from `WebFeatureModule` or implements `IWebFeatureModule`. 
+5. Good, now the message bus is added to the services collection. Next, we need to configure a broker that will be used to send and receive messages. In this sample, we will use the in-memory message broker.
+```csharp
+builder.AddInfinityMessaging().ConfigureInMemoryBus();
+```
 
-# Logging formatter
-A logging formatter that formats log messages with a Visual Studio Code inspired theme and Serilog like formatting.
+6. Build and run the application and make sure everything is working as expected.
 
-# Infinity.Toolkit.Azure
-## TokenCredentialHelper
-Helps creating a ChainedTokenCredential used to authenticate with Azure services.
-By default, the following credential types are included:
-EnvironmentCredential
-ManagedIdentityCredential
+7. Now we need to configure a ChannelProducer that will be used to send messages. In this sample, we will use the in-memory channel producer.
+```csharp
+builder.AddInfinityMessaging()
+    .ConfigureInMemoryBus(builder =>
+    {
+        builder.AddChannelProducer<WeatherForecast>(options => { options.ChannelName = "weatherforecasts"; })
+    });
+```
+This will add a channel producer that will send messages of type WeatherForecast to the channel named weatherforecasts.
 
-To include additional credential types, set the corresponding environment variable to "true".
-INCLUDE_VISUAL_STUDIO_CREDENTIAL
-INCLUDE_VISUAL_STUDIO_CODE_CREDENTIAL
-INCLUDE_INTERACTIVE_BROWSER_CREDENTIAL
-INCLUDE_AZURE_DEVELOPER_CLI_CREDENTIAL
-INCLUDE_AZURE_POWER_SHELL_CREDENTIAL
-INCLUDE_AZURE_CLI_CREDENTIAL
-INCLUDE_WORKLOAD_IDENTITY_CREDENTIAL
+8. Now we can send messages to the channel but we also need to configure a channel consumer that will consume the messages. In this sample, we will use the in-memory channel consumer that consumes messages from the weatherforecasts channel.
+The channel is configured as a topic so we need to configure a subscription name as well.
+```csharp
+builder.AddInfinityMessaging()
+    .ConfigureInMemoryBus(builder =>
+    {
+        builder
+            .AddChannelProducer<WeatherForecast>(options => { options.ChannelName = "weatherforecasts"; })
+            .AddChannelConsumer<WeatherForecast>(options =>
+            {
+                options.ChannelName = "weatherforecasts";
+                options.SubscriptionName = "weathersubscription";
+            });
+    });
+```
+
+9. Now we can send messages to the channel and consume the messages. However we have no handler that will handle the messages with the type WeatherForecast. Let's add the handler to the services collection.
+```csharp
+builder.AddInfinityMessaging()
+    .ConfigureInMemoryBus(builder =>
+    {
+        builder
+            .AddChannelProducer<WeatherForecast>(options => { options.ChannelName = "weatherforecasts"; })
+            .AddChannelConsumer<WeatherForecast>(options =>
+            {
+                options.ChannelName = "weatherforecasts";
+                options.SubscriptionName = "weathersubscription";
+            });
+    })
+    .MapMessageHandler<WeatherForecast, WeatherForecastMessageHandler>();
+```
+
+10. Let's add an endpoint so we can send messages to the channel.
+```csharp
+app.MapPost("/send", async (ChannelProducer<WeatherForecast> producer) =>
+{
+    await producer.SendAsync(new WeatherForecast(DateTime.Now, 20, "Sunny"));
+    return Results.Ok();
+});
+```
+
+10. Now we have a complete setup with a message bus, channel producer, channel consumer and a message handler. We can now send messages to the channel and the message handler will handle the messages.
+
 
 # Contributing
 If you have any ideas, suggestions or issues, please create an issue or a pull request. Or reach out to me on [BlueSky](https://bsky.app/profile/peternylander.bsky.social).
 
 # License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-# Pushing to NuGet
- dotnet nuget push .\artifacts\Infinity.Toolkit.FeatureModules.1.1.0.nupkg -k API-KEY -s https://api.nuget.org/v3/index.json

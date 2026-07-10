@@ -8,10 +8,11 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Infinity.Toolkit.Messaging.AzureServiceBus" />
-    <InternalsVisibleTo Include="Infinity.Toolkit.Tests" />
+    <InternalsVisibleTo Include="Infinity.Toolkit.Messaging.Tests" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Infinity.Toolkit" Version="1.4.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
@@ -23,10 +24,6 @@
     <PackageReference Include="OpenTelemetry.Api" Version="1.16.0" />
     <PackageReference Include="Scrutor" Version="7.0.0" />
     <PackageReference Include="System.Memory.Data" Version="10.0.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Infinity.Toolkit\Infinity.Toolkit.csproj" />
   </ItemGroup>
 
 </Project>

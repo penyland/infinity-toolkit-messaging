@@ -3,7 +3,7 @@ using Infinity.Toolkit.Messaging.InMemory;
 using NSubstitute.ReceivedExtensions;
 using System.Diagnostics;
 
-namespace Infinity.Toolkit.Tests.Messaging.InMemory;
+namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
 public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
 {
@@ -99,7 +99,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
                 testOutputHelper);
 
             // Act
-            var bus = serviceProvider.GetRequiredService<IBroker>() as Infinity.Toolkit.Messaging.InMemory.InMemoryBus;
+            var bus = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
             var processErrorArgs = new ProcessErrorEventArgs(new Exception("Test"), "Test");
             var act = () => bus!.ProcessErrorAsync(processErrorArgs);
 
@@ -124,7 +124,7 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
             testOutputHelper);
 
             // Act
-            var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Infinity.Toolkit.Messaging.InMemory.InMemoryBus;
+            var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
             var processErrorArgs = new ProcessErrorEventArgs(new Exception("Test"), "Test");
             var act = () => inMemoryBroker!.ProcessErrorAsync(processErrorArgs);
 
@@ -143,18 +143,15 @@ public class InMemoryBus(ITestOutputHelper testOutputHelper) : TestBase
             var testExceptionHandler2 = Substitute.For<TestExceptionHandler>(true);
 
             var serviceProvider = ConfigureServiceProvider(
-                services =>
-                {
-                    services
+                services => services
                         .AddInfinityMessaging()
                             .ConfigureInMemoryBus()
                             .AddExceptionHandler(testExceptionHandler1)
-                            .AddExceptionHandler(testExceptionHandler2);
-                },
+                            .AddExceptionHandler(testExceptionHandler2),
                 testOutputHelper);
 
             // Act
-            var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Infinity.Toolkit.Messaging.InMemory.InMemoryBus;
+            var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
             var processErrorArgs = new ProcessErrorEventArgs(new Exception("Test"), "Test");
             var task = () => inMemoryBroker!.ProcessErrorAsync(processErrorArgs);
             await task.Invoke();

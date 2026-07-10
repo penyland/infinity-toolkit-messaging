@@ -1,8 +1,7 @@
 ﻿using Infinity.Toolkit.Messaging.Abstractions;
 using Infinity.Toolkit.Messaging.InMemory;
-using Shouldly;
 
-namespace Infinity.Toolkit.Tests.Messaging.InMemory;
+namespace Infinity.Toolkit.Messaging.Tests.InMemory;
 
 public class MessageBusTests : TestBase
 {

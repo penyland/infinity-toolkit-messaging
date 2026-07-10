@@ -16,6 +16,7 @@ public static partial class MessageBusBuilderExtensions
     /// </summary>
     /// <typeparam name="TMessage">The type of the message.</typeparam>
     /// <typeparam name="TMessageHandler">The type of the message handler.</typeparam>
+    /// <param name="builder">The <see cref="MessageBusBuilder"/>.</param>
     /// <param name="configure">An optional lambda used for configuring the message handler.</param>
     /// <returns>A <see cref="MessageHandlerBuilder"/> that can be used to configure the handler.</returns>
     public static MessageHandlerBuilder MapMessageHandler<TMessage, TMessageHandler>(this MessageBusBuilder builder, Func<IServiceProvider, TMessageHandler>? configure = null)
@@ -68,12 +69,12 @@ public static partial class MessageBusBuilderExtensions
     }
 
     /// <summary>
-    /// Adds an `IMessagingErrorHandler` implementation to services. `IMessagingErrorHandler` implementations
-    /// are used by the exception handler middleware to handle unexpected request exceptions.
-    /// Multiple handlers can be added and they're called by the middleware in the order
-    /// they're added.
+    /// Adds an `IMessagingErrorHandler` implementation to services. `IMessagingErrorHandler` implementations are used
+    /// by the exception handler middleware to handle unexpected request exceptions. Multiple handlers can be added and
+    /// they're called by the middleware in the order they're added.
     /// </summary>
     /// <typeparam name="TErrorHandler">The type of the exception handler implementation.</typeparam>
+    /// <param name="builder">The <see cref="MessageBusBuilder"/>.</param>
     /// <param name="implementationInstance">The instance of the service.</param>
     /// <returns>A <see cref="MessageHandlerBuilder"/> that can be used to configure the handler.</returns>
     public static MessageBusBuilder AddExceptionHandler<TErrorHandler>(this MessageBusBuilder builder, TErrorHandler implementationInstance)

@@ -1,6 +1,6 @@
 ﻿using Infinity.Toolkit.Messaging.Abstractions;
 
-namespace Infinity.Toolkit.Tests.Messaging;
+namespace Infinity.Toolkit.Messaging.Tests;
 
 internal class TestBroker : IBroker
 {
