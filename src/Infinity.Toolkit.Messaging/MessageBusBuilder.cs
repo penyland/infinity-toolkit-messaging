@@ -10,6 +10,28 @@ public sealed class MessageBusBuilder(IServiceCollection services)
 public static partial class MessageBusBuilderExtensions
 {
     /// <summary>
+    /// Map a message handler to a message type of type <typeparamref name="TMessage"/> on all
+    /// registered brokers. Message handlers are registered as transient services and are resolved
+    /// from the DI container when a message is received.
+    /// Use the messageBuses parameter to specify which message buses to register the handler on. If
+    /// no message buses are specified, the handler will be registered on all message buses.
+    /// </summary>
+    /// <typeparam name="TMessage"></typeparam>
+    /// <typeparam name="TMessageHandler"></typeparam>
+    /// <param name="builder"></param>
+    /// <param name="configure"></param>
+    /// <param name="messageBuses">
+    /// A filtered list of message buses to which the handler should be mapped.
+    /// </param>
+    /// <returns>A <see cref="MessageHandlerBuilder"/> that can be used to configure the handler.</returns>
+    public static MessageHandlerBuilder MapMessageHandler<TMessage, TMessageHandler>(this MessageBusBuilder builder, Func<IServiceProvider, TMessageHandler>? configure = null, params object[] messageBuses)
+     where TMessage : class
+     where TMessageHandler : class, IMessageHandler<TMessage>
+    {
+        return new MessageHandlerBuilder(builder.Services);
+    }
+
+    /// <summary>
     /// Map a message handler to a message type of type <typeparamref name="TMessage"/> on all registered brokers.
     /// Message handlers are registered as transient services.
     ///
