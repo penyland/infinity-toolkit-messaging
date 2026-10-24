@@ -9,14 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Infinity.Toolkit.Azure" Version="1.1.6" />
+    <PackageReference Include="Infinity.Toolkit.Azure" Version="1.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
     <PackageReference Include="Microsoft.OpenApi" Version="2.13.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.18.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Infinity.Toolkit.Messaging.AzureServiceBus\Infinity.Toolkit.Messaging.AzureServiceBus.csproj" />
     <ProjectReference Include="..\..\src\Infinity.Toolkit.Messaging\Infinity.Toolkit.Messaging.csproj" />
+    <ProjectReference Include="..\SampleAppHost\SampleAppHost.ServiceDefaults\SampleAppHost.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

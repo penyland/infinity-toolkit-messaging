@@ -3,6 +3,8 @@
     <Project Path="D:/penyland/infinity-toolkit-messaging/samples/AzureServiceBusMessagingSample/AzureServiceBusMessagingSample.csproj" />
     <Project Path="D:/penyland/infinity-toolkit-messaging/samples/MessagingSample/MessagingSample.csproj" />
     <Project Path="D:/penyland/infinity-toolkit-messaging/samples/MessagingSample2/MessagingSample2.csproj" Id="08103178-3df2-489b-816a-2c4287db7619" />
+    <Project Path="samples/SampleAppHost/SampleAppHost.AppHost/AppHost.csproj" Id="7d2d6971-95f9-4c5f-a348-96bdf5b1911a" />
+    <Project Path="samples/SampleAppHost/SampleAppHost.ServiceDefaults/SampleAppHost.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="D:/penyland/infinity-toolkit-messaging/src/Infinity.Toolkit.Messaging.AzureServiceBus/Infinity.Toolkit.Messaging.AzureServiceBus.csproj" />

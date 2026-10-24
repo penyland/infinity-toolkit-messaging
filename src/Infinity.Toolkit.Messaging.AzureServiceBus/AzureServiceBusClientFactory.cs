@@ -12,7 +12,7 @@ public sealed class AzureServiceBusClientFactory : IAsyncDisposable
 
     public AzureServiceBusClientFactory(IServiceProvider serviceProvider, IOptions<AzureServiceBusOptions> options)
     {
-        // Check if ServiceBusClient is registered in the DI container for example when using .NET Aspire Azure Service Bus component
+        // Check if ServiceBusClient is registered in the DI container for example when using Aspire Azure Service Bus integration.
         if (serviceProvider.GetService<ServiceBusClient>() is not null)
         {
             serviceBusClient = serviceProvider.GetRequiredService<ServiceBusClient>();
