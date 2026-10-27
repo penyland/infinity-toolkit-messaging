@@ -32,6 +32,7 @@ builder.AddInfinityMessaging()
             .AddChannelProducer<WeatherForecast2>()
             .AddChannelConsumer<WeatherForecast2>();
     });
+    //.AddChannelConsumer<WeatherForecast2>(options => { options.ChannelName = "weatherforecasts2"; options.SubscriptionName = "weathersubscription2"; })
     //.MapMessageHandler<WeatherForecast2, WeatherForecastMessageHandler>(InMemoryBusDefaults.Name);
 
 

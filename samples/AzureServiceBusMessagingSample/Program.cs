@@ -25,11 +25,6 @@ builder.AddInfinityMessaging()
                 options.ChannelName = "toolkit-development";
                 options.SubscriptionName = "subscription1";
             });
-    },
-    options =>
-    {
-        //options.ConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
-        //options.TokenCredential = new AzureCliCredential();
     })
     .MapMessageHandler<WeatherForecast, WeatherForecastMessageHandler>();
 
