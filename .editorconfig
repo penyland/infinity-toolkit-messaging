@@ -286,7 +286,7 @@ dotnet_diagnostic.IDE0001.severity = warning
 dotnet_diagnostic.IDE0002.severity = warning
 dotnet_diagnostic.IDE0003.severity = warning
 dotnet_diagnostic.IDE0004.severity = warning
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = suggestion
 
 dotnet_code_quality_unused_parameters = all:suggestion
 dotnet_diagnostic.UseConfigureAwait.severity = warning

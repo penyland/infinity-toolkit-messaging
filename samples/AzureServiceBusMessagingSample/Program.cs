@@ -13,6 +13,8 @@ builder.AddOpenTelemetry()
     .WithMetrics(metrics => metrics.AddMessagingInstrumentation())
     .WithTracing(tracing => tracing.AddMessagingInstrumentation());
 
+builder.AddAzureServiceBusClient(connectionName: "AzureServiceBus");
+
 builder.AddInfinityMessaging()
     .ConfigureAzureServiceBus(builder =>
     {
@@ -26,8 +28,8 @@ builder.AddInfinityMessaging()
     },
     options =>
     {
-        options.ConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
-        options.TokenCredential = new AzureCliCredential();
+        //options.ConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
+        //options.TokenCredential = new AzureCliCredential();
     })
     .MapMessageHandler<WeatherForecast, WeatherForecastMessageHandler>();
 

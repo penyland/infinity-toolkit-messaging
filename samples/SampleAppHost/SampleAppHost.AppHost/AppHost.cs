@@ -2,7 +2,7 @@ using System.Text.Json.Nodes;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var serviceBus = builder.AddAzureServiceBus("messaging")
+var serviceBus = builder.AddAzureServiceBus("AzureServiceBus")
     .RunAsEmulator(emulator =>
     {
         emulator.WithLifetime(ContainerLifetime.Persistent);
