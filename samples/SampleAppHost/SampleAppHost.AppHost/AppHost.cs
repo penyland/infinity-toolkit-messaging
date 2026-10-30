@@ -23,4 +23,6 @@ var topic2 = serviceBus
 builder.AddProject<Projects.AzureServiceBusMessagingSample>("azureServiceBusSample")
     .WithReference(serviceBus, "AzureServiceBus").WaitFor(serviceBus);
 
+var connectionString = builder.AddConnectionString("ServiceBus");
+
 builder.Build().Run();
