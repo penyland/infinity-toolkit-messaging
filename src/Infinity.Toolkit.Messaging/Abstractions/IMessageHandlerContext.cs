@@ -62,8 +62,7 @@ public interface IMessageHandlerContext<TMessage> : IMessageHandlerContext
     TMessage? Message { get; }
 
     /// <summary>
-    /// The type of the message.
+    /// Gets the runtime type represented by <c>TMessage</c>.
     /// </summary>
-    //[JsonIgnore]
-    //Type MessageType { get; }
+    static Type Type { get; } = typeof(TMessage);
 }
