@@ -183,7 +183,7 @@ internal class AzureServiceBusBroker : IBroker
 
         var messageHandlerContext = new AzureServiceBusMessageHandlerContext
         {
-            Body = args.Message.Body,
+            Payload = args.Message.Body,
             ChannelName = args.EntityPath,
             Headers = args.Message.ApplicationProperties,
             SequenceNumber = args.Message.SequenceNumber,
@@ -249,7 +249,7 @@ internal class AzureServiceBusBroker : IBroker
         var messageHandlerContext = new AzureServiceBusBrokerMessageHandlerContext<TMessage>
         {
             Message = message,
-            Body = args.Message.Body!,
+            Payload = args.Message.Body!,
             ChannelName = args.EntityPath,
             Headers = args.Message.ApplicationProperties,
             SequenceNumber = args.Message.SequenceNumber,

@@ -129,7 +129,7 @@ internal sealed class DeferredChannelConsumer<T>(
 
         var messageContext = new AzureServiceBusBrokerMessageHandlerContext<TMessage>
         {
-            Body = message.Body,
+            Payload = message.Body,
             Headers = message.ApplicationProperties,
             Message = messageBody,
             SequenceNumber = message.SequenceNumber,
