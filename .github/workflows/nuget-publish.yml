@@ -25,7 +25,7 @@ jobs:
         with:
           repository: penyland/infinity-toolkit
           ref: main
-          path: infinity-toolkit
+          path: ../infinity-toolkit
       
       - name: Setup .NET 11
         uses: actions/setup-dotnet@v6
