@@ -39,11 +39,31 @@ public static class InMemoryBusBuilderExtensions
         builder.Services.AddOptions<InMemoryBusOptions>()
             .Configure(options =>
             {
-                options.ChannelConsumerRegistry.Add(typeof(TMessage).AssemblyQualifiedName ?? typeof(TMessage).Name, new ChannelConsumerRegistration
+                options.ChannelConsumerRegistry.TryAdd(typeof(TMessage).AssemblyQualifiedName ?? typeof(TMessage).Name, new ChannelConsumerRegistration
                 {
                     BrokerName = builder.BrokerName,
                     EventType = typeof(TMessage),
                     Key = typeof(TMessage).AssemblyQualifiedName ?? typeof(TMessage).Name
+                });
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        builder.Services.AddOptions<MessageBusBrokerOptions>()
+            .Configure(options =>
+            {
+                options.ChannelConsumerRegistry.TryAdd(typeof(TMessage).AssemblyQualifiedName ?? typeof(TMessage).Name, new ChannelConsumerRegistration
+                {
+                    BrokerName = builder.BrokerName,
+                    EventType = typeof(TMessage),
+                    Key = typeof(TMessage).AssemblyQualifiedName ?? typeof(TMessage).Name,
+                    Options = new ChannelConsumerOptions
+                    {
+                        EventType = typeof(TMessage),
+                        ChannelName = typeof(TMessage).Name,
+                        ChannelType = ChannelType.Topic,
+                        SubscriptionName = typeof(TMessage).Name
+                    }
                 });
             })
             .ValidateDataAnnotations()

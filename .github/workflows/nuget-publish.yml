@@ -18,13 +18,24 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infinity-toolkit-messaging
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup .NET 10
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
         with:
-          dotnet-version: "10.0.x"
+          path: infinity-toolkit-messaging
+        
+      - uses: actions/checkout@v7
+        with:
+          repository: penyland/infinity-toolkit
+          ref: main
+          path: infinity-toolkit
+      
+      - name: Setup .NET 11
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "11.0.x"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -39,14 +50,14 @@ jobs:
         run: dotnet pack --configuration Release --output ./nupkgs -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: Publish
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuget-packages
           if-no-files-found: error
           retention-days: 7
           path: |
-            ./nupkgs/*.nupkg
-            ./nupkgs/*.snupkg
+            ./infinity-toolkit-messaging/nupkgs/*.nupkg
+            ./infinity-toolkit-messaging/nupkgs/*.snupkg
 
   publish-nuget:
     needs: build-and-test
@@ -60,11 +71,17 @@ jobs:
           path: ./nupkgs
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: "10.0.x"
+          dotnet-version: "11.0.x"
+
+      - name: NuGet login (OIDC)
+        uses: nuget/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
 
       - name: Publish to NuGet
         run: |
-          dotnet nuget push **/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
-          dotnet nuget push **/*.snupkg --api-key ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push **/*.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push **/*.snupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

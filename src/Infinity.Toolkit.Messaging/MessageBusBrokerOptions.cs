@@ -22,7 +22,7 @@ public class MessageBusBrokerOptions
     /// Gets the channel consumer registry.
     /// </summary>
     [JsonIgnore]
-    internal Dictionary<string, ChannelConsumerRegistration> ChannelConsumerRegistry { get; } = [];
+    public Dictionary<string, ChannelConsumerRegistration> ChannelConsumerRegistry { get; } = [];
 }
 
 internal class ConfigureMessageBusBrokerOptions : IPostConfigureOptions<MessageBusBrokerOptions>

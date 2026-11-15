@@ -3,6 +3,8 @@ using Infinity.Toolkit.Messaging;
 using Infinity.Toolkit.Messaging.Abstractions;
 using Infinity.Toolkit.Messaging.AzureServiceBus;
 using Infinity.Toolkit.Messaging.InMemory;
+using Microsoft.Extensions.Options;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +15,13 @@ builder.AddInfinityMessaging()
     //})
     .ConfigureAzureServiceBus(builder =>
     {
-    }, options =>
+        builder.AddChannelConsumer<WeatherForecast>(options =>
+        {
+            options.ChannelName = "weatherforecasts";
+            options.SubscriptionName = "weathersubscription";
+        });
+    },
+    options =>
     {
         options.ConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
         options.TokenCredential = new DefaultAzureCredential();
@@ -26,12 +34,14 @@ builder.AddInfinityMessaging()
             {
                 options.ChannelName = "weatherforecasts";
                 options.SubscriptionName = "weathersubscription";
-            });
+            })
+            .AddChannelConsumer<WeatherForecast2>();
 
         builder
             .AddChannelProducer<WeatherForecast2>()
             .AddChannelConsumer<WeatherForecast2>();
     });
+    //.AddChannelConsumer<WeatherForecast2>(options => { options.ChannelName = "weatherforecasts2"; options.SubscriptionName = "weathersubscription2"; })
     //.MapMessageHandler<WeatherForecast2, WeatherForecastMessageHandler>(InMemoryBusDefaults.Name);
 
 
@@ -45,6 +55,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/");
 }
 
 app.UseHttpsRedirection();
@@ -72,6 +83,13 @@ app.MapPost("/weatherforecast", async (IChannelProducer<WeatherForecast2> channe
 {
     await channelProducer.SendAsync(new WeatherForecast2(DateOnly.FromDateTime(DateTime.Now), 20, "Sunny"), CancellationToken.None);
     return Results.Accepted();
+});
+
+app.MapGet("/consumers", async (IOptions<MessageBusBrokerOptions> options) =>
+{
+    //var consumers = options.Value.ChannelConsumerRegistry.Select(x => new { x.Key, x.Value.BrokerName, EventType = x.Value.EventType.ToString() });
+    var consumers = options.Value.ChannelConsumerRegistry.ToList();
+    return Results.Ok(consumers);
 });
 
 app.Run();

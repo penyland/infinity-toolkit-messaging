@@ -8,7 +8,7 @@ namespace Infinity.Toolkit.Messaging;
 public abstract class MessageHandlerContextBase : IMessageHandlerContext
 {
     /// <inheritdoc />
-    public BinaryData Body { get; init; }
+    public BinaryData Payload { get; init; }
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, object?> Headers { get; init; }

@@ -2,9 +2,18 @@ using Azure.Identity;
 using Infinity.Toolkit.Messaging;
 using Infinity.Toolkit.Messaging.Abstractions;
 using Infinity.Toolkit.Messaging.AzureServiceBus;
+using Infinity.Toolkit.Messaging.OpenTelemetry;
 using Microsoft.AspNetCore.Mvc;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+builder.AddOpenTelemetry()
+    .WithMetrics(metrics => metrics.AddMessagingInstrumentation())
+    .WithTracing(tracing => tracing.AddMessagingInstrumentation());
+
+builder.AddAzureServiceBusClient(connectionName: "AzureServiceBus");
 
 builder.AddInfinityMessaging()
     .ConfigureAzureServiceBus(builder =>
@@ -16,10 +25,6 @@ builder.AddInfinityMessaging()
                 options.ChannelName = "toolkit-development";
                 options.SubscriptionName = "subscription1";
             });
-    },
-    options =>
-    {
-        options.TokenCredential = new AzureCliCredential();
     })
     .MapMessageHandler<WeatherForecast, WeatherForecastMessageHandler>();
 
@@ -33,9 +38,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/");
 }
 
 app.UseHttpsRedirection();
+
+app.MapDefaultEndpoints();
 
 app.MapGet("/config", ([FromServices] IConfiguration configuration) =>
 {

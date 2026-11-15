@@ -1,10 +1,14 @@
 using Infinity.Toolkit.Messaging.Abstractions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 
 namespace Infinity.Toolkit.Messaging;
 
-public sealed class MessageBusBuilder(IServiceCollection services)
+public sealed class MessageBusBuilder(IHostApplicationBuilder builder)
 {
-    public IServiceCollection Services { get; } = services ?? throw new ArgumentNullException(nameof(services));
+    public IServiceCollection Services { get; } = builder.Services ?? throw new ArgumentNullException(nameof(builder.Services));
+
+    public IHostApplicationBuilder HostApplicationBuilder { get; } = builder ?? throw new ArgumentNullException(nameof(builder));
 }
 
 public static partial class MessageBusBuilderExtensions

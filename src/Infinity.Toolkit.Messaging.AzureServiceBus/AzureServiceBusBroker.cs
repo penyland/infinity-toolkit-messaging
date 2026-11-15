@@ -1,8 +1,7 @@
+using Infinity.Toolkit.Messaging.Abstractions;
+using Infinity.Toolkit.Messaging.Diagnostics;
 using System.Collections.Concurrent;
 using System.Reflection;
-using Infinity.Toolkit.Messaging.Abstractions;
-using Infinity.Toolkit.Messaging.AzureServiceBus;
-using Infinity.Toolkit.Messaging.Diagnostics;
 using static Infinity.Toolkit.Messaging.Diagnostics.Errors;
 
 namespace Infinity.Toolkit.Messaging.AzureServiceBus;
@@ -184,7 +183,7 @@ internal class AzureServiceBusBroker : IBroker
 
         var messageHandlerContext = new AzureServiceBusMessageHandlerContext
         {
-            Body = args.Message.Body,
+            Payload = args.Message.Body,
             ChannelName = args.EntityPath,
             Headers = args.Message.ApplicationProperties,
             SequenceNumber = args.Message.SequenceNumber,
@@ -250,7 +249,7 @@ internal class AzureServiceBusBroker : IBroker
         var messageHandlerContext = new AzureServiceBusBrokerMessageHandlerContext<TMessage>
         {
             Message = message,
-            Body = args.Message.Body!,
+            Payload = args.Message.Body!,
             ChannelName = args.EntityPath,
             Headers = args.Message.ApplicationProperties,
             SequenceNumber = args.Message.SequenceNumber,

@@ -1,17 +1,13 @@
+using Infinity.Toolkit.Handlers;
+
 namespace Infinity.Toolkit.Messaging.Abstractions;
 
 /// <summary>
 /// Represents a message handler context which contains the message body and the message headers.
 /// The consumer can use this context to complete the message if necessary.
 /// </summary>
-public interface IMessageHandlerContext
+public interface IMessageHandlerContext : IHandlerContext
 {
-    /// <summary>
-    /// The message body.
-    /// </summary>
-    [JsonIgnore]
-    BinaryData Body { get; }
-
     /// <summary>
     /// The channel name.
     /// </summary>
@@ -57,7 +53,7 @@ public interface IMessageHandlerContext
 /// Represents a typed message handler context which contains the deserialized message and the message headers.
 /// </summary>
 /// <typeparam name="TMessage">The type of the message.</typeparam>
-public interface IMessageHandlerContext<out TMessage> : IMessageHandlerContext
+public interface IMessageHandlerContext<TMessage> : IMessageHandlerContext
     where TMessage : class
 {
     /// <summary>
@@ -66,8 +62,7 @@ public interface IMessageHandlerContext<out TMessage> : IMessageHandlerContext
     TMessage? Message { get; }
 
     /// <summary>
-    /// The type of the message.
+    /// Gets the runtime type represented by <c>TMessage</c>.
     /// </summary>
-    [JsonIgnore]
-    Type MessageType { get; }
+    static Type Type { get; } = typeof(TMessage);
 }

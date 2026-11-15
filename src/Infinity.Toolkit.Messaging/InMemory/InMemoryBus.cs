@@ -179,7 +179,7 @@ internal class InMemoryBus : IBroker
 
         var messageHandlerContext = new InMemoryBusMessageHandlerContext
         {
-            Body = args.Message.Body,
+            Payload = args.Message.Body,
             ChannelName = args.ChannelName,
             Headers = args.Message.ApplicationProperties,
             SequenceNumber = args.Message.SequenceNumber,
@@ -243,7 +243,7 @@ internal class InMemoryBus : IBroker
         var messageHandlerContext = new InMemoryBrokerMessageHandlerContext<TMessage>
         {
             Message = message,
-            Body = args.Message.Body!,
+            Payload = args.Message.Body!,
             ChannelName = args.ChannelName,
             Headers = args.Message.ApplicationProperties,
             SequenceNumber = args.Message.SequenceNumber,

@@ -12,7 +12,7 @@ internal static class MessagingTestHelpers
     {
         return SendAndWaitForEventAsync<T>(
                     testAction,
-                    m => m.MessageType == typeof(T),
+                    m => IMessageHandlerContext<T>.Type == typeof(T),
                     timeout);
     }
 

@@ -11,10 +11,10 @@ public class MessageBusTests : TestBase
         public async Task Is_True_When_Processing()
         {
             // Arrange
-            var serviceProvider = ConfigureServiceProvider(
-                services =>
+            var hostApplicationBuilder = ConfigureHostApplicationBuilder(
+                builder =>
                 {
-                    services.AddInfinityMessaging(bus =>
+                    builder.AddInfinityMessaging(bus =>
                     {
                         bus.ConfigureInMemoryBus(builder =>
                            {
@@ -28,7 +28,8 @@ public class MessageBusTests : TestBase
                 });
 
             // Act
-            var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
+            var host = hostApplicationBuilder.Build();
+            var messageBus = host.Services.GetRequiredService<IMessageBus>();
             await messageBus.InitAsync();
             await messageBus.StartAsync(cancellationToken: CancellationToken.None);
 
@@ -40,10 +41,10 @@ public class MessageBusTests : TestBase
         public async Task Is_False_When_Not_Processing()
         {
             // Arrange
-            var serviceProvider = ConfigureServiceProvider(
-                services =>
+            var hostApplicationBuilder = ConfigureHostApplicationBuilder(
+                builder =>
                 {
-                    services.AddInfinityMessaging(bus =>
+                    builder.AddInfinityMessaging(bus =>
                     {
                         bus.AddInMemoryBus(builder =>
                         {
@@ -57,7 +58,8 @@ public class MessageBusTests : TestBase
                 });
 
             // Act
-            var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
+            var host = hostApplicationBuilder.Build();
+            var messageBus = host.Services.GetRequiredService<IMessageBus>();
             await messageBus.InitAsync();
             await messageBus.StartAsync(cancellationToken: CancellationToken.None);
             await messageBus.StopAsync(CancellationToken.None);
@@ -73,10 +75,10 @@ public class MessageBusTests : TestBase
         public async Task Should_Not_Throw_When_Already_Started()
         {
             // Arrange
-            var serviceProvider = ConfigureServiceProvider(
-                services =>
+            var hostApplicationBuilder = ConfigureHostApplicationBuilder(
+                builder =>
                 {
-                    services.AddInfinityMessaging(bus =>
+                    builder.AddInfinityMessaging(bus =>
                     {
                         bus.AddInMemoryBus(builder =>
                         {
@@ -90,7 +92,8 @@ public class MessageBusTests : TestBase
                 });
 
             // Act
-            var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
+            var host = hostApplicationBuilder.Build();
+            var messageBus = host.Services.GetRequiredService<IMessageBus>();
             await messageBus.InitAsync();
             await messageBus.StartAsync(cancellationToken: CancellationToken.None);
             var task = () => messageBus.StartAsync(cancellationToken: CancellationToken.None);
