@@ -1,4 +1,6 @@
-﻿namespace Infinity.Toolkit.Messaging.Tests;
+﻿using Microsoft.Extensions.Hosting;
+
+namespace Infinity.Toolkit.Messaging.Tests;
 
 public class MessageBusBuilderTests : TestBase
 {
@@ -6,8 +8,8 @@ public class MessageBusBuilderTests : TestBase
     public void MapMessageHandler_Should_Succeed()
     {
         // Arrange
-        var services = new ServiceCollection();
-        var messageBusBuilder = new MessageBusBuilder(services);
+        var builder = new HostApplicationBuilder();
+        var messageBusBuilder = new MessageBusBuilder(builder);
 
         // Act
         var result = messageBusBuilder.MapMessageHandler<TestMessage, TestMessageHandler>();
@@ -20,8 +22,8 @@ public class MessageBusBuilderTests : TestBase
     public void AddBroker_Should_Succeed()
     {
         // Arrange
-        var services = new ServiceCollection();
-        var messageBusBuilder = new MessageBusBuilder(services);
+        var builder = new HostApplicationBuilder();
+        var messageBusBuilder = new MessageBusBuilder(builder);
 
         // Act
         var result = messageBusBuilder.AddBroker<TestBroker, DefaultMessageBrokerOptions>("brokerType", options => { });

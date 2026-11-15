@@ -1,11 +1,21 @@
-﻿using Infinity.Toolkit.Messaging.Tests.Utils;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Infinity.Toolkit.Messaging.Tests;
 
 public class TestBase
 {
+    public static HostApplicationBuilder ConfigureHostApplicationBuilder(Action<IHostApplicationBuilder> configure)
+    {
+        var builder = new HostApplicationBuilder();
+        builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddTUnit());
+        builder.Services.AddMetrics();
+        builder.Services.AddSingleton(CreateConfiguration([]));
+        configure(builder);
+        return builder;
+    }
+
     public static ServiceProvider ConfigureServiceProvider(Action<IServiceCollection> configure)
     {
         var services = new ServiceCollection();
@@ -17,9 +27,12 @@ public class TestBase
         return services.BuildServiceProvider();
     }
 
-    public static IConfiguration CreateConfiguration(Dictionary<string, string?> configurationValues) => new ConfigurationBuilder()
+    public static IConfiguration CreateConfiguration(Dictionary<string, string?> configurationValues)
+    {
+        return new ConfigurationBuilder()
             .AddInMemoryCollection(configurationValues)
             .Build();
+    }
 }
 
 public class TestOptionsMonitor<T>(T options) : IOptionsMonitor<T>

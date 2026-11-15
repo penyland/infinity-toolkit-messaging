@@ -11,12 +11,12 @@ public class InMemoryBus : TestBase
     public async Task Should_Process_Message_Successfully()
     {
         // Arrange
-        var serviceProvider = ConfigureServiceProvider(
-            services =>
+        var hostApplicationBuilder = ConfigureHostApplicationBuilder(
+            builder =>
             {
-                services.AddInfinityMessaging().ConfigureInMemoryBus(builder =>
+                builder.AddInfinityMessaging().ConfigureInMemoryBus(bb =>
                 {
-                    builder.AddChannelConsumer<TestMessage>(options =>
+                    bb.AddChannelConsumer<TestMessage>(options =>
                     {
                         options.ChannelName = "test";
                         options.SubscriptionName = "test";
@@ -26,12 +26,13 @@ public class InMemoryBus : TestBase
                 .MapMessageHandler<TestMessage, TestMessageHandler>();
             });
 
+        using var host = hostApplicationBuilder.Build();
         ObservedMessageContexts results;
 
-        var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
+        var messageBus = host.Services.GetRequiredService<IMessageBus>();
         await messageBus.InitAsync();
         await messageBus.StartAsync(cancellationToken: CancellationToken.None);
-        var channelProducer = serviceProvider.GetRequiredService<IChannelProducer<TestMessage>>();
+        var channelProducer = host.Services.GetRequiredService<IChannelProducer<TestMessage>>();
 
         // Act
         results = await MessagingTestHelpers.SendAndWaitForEvent<TestMessage>(
@@ -46,14 +47,14 @@ public class InMemoryBus : TestBase
     public async Task Should_Invoke_ExceptionHandler()
     {
         // Arrange
-        var serviceProvider = ConfigureServiceProvider(
-            services =>
+        var hostApplicationBuilder = ConfigureHostApplicationBuilder(
+            builder =>
             {
-                services.AddInfinityMessaging(configureBusBuilder: builder =>
+                builder.AddInfinityMessaging(configureBusBuilder: bb =>
                 {
-                    builder.ConfigureInMemoryBus(bb =>
+                    bb.ConfigureInMemoryBus(cc =>
                     {
-                        bb.AddChannelConsumer<TestMessage>(options =>
+                        cc.AddChannelConsumer<TestMessage>(options =>
                         {
                             options.ChannelName = "test";
                             options.SubscriptionName = "test";
@@ -64,19 +65,20 @@ public class InMemoryBus : TestBase
                 })
                 .AddExceptionHandler<TestExceptionHandler2>();
 
-                services.AddScoped<TestExceptionHandlerData>();
+                builder.Services.AddScoped<TestExceptionHandlerData>();
             });
 
         // Act
-        var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
+        using var host = hostApplicationBuilder.Build();
+        var messageBus = host.Services.GetRequiredService<IMessageBus>();
         await messageBus.InitAsync();
         await messageBus.StartAsync(cancellationToken: CancellationToken.None);
-        var channelProducer = serviceProvider.GetRequiredService<IChannelProducer<TestMessage>>();
+        var channelProducer = host.Services.GetRequiredService<IChannelProducer<TestMessage>>();
         await channelProducer.SendAsync(new TestMessage("testContent"), cancellationToken: CancellationToken.None);
         await Task.Delay(1000, CancellationToken.None);
 
         // Assert
-        var testExceptionHandlerData = serviceProvider.GetRequiredService<TestExceptionHandlerData>();
+        var testExceptionHandlerData = host.Services.GetRequiredService<TestExceptionHandlerData>();
         testExceptionHandlerData.Handled.ShouldBeTrue();
     }
 
@@ -86,14 +88,15 @@ public class InMemoryBus : TestBase
         public async Task Should_Use_DefaultExceptionHandlerAsync()
         {
             // Arrange
-            var serviceProvider = ConfigureServiceProvider(
-                services =>
+            var hostApplicationBuilder = ConfigureHostApplicationBuilder(
+                builder =>
                 {
-                    services.AddInfinityMessaging().ConfigureInMemoryBus();
+                    builder.AddInfinityMessaging().ConfigureInMemoryBus();
                 });
 
             // Act
-            var bus = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
+            var host = hostApplicationBuilder.Build();
+            var bus = host.Services.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
             var processErrorArgs = new ProcessErrorEventArgs(new Exception("Test"), "Test");
             var act = () => bus!.ProcessErrorAsync(processErrorArgs);
 
@@ -108,16 +111,17 @@ public class InMemoryBus : TestBase
             // Arrange
             var testExceptionHandler = Substitute.For<TestExceptionHandler>(false);
 
-            var serviceProvider = ConfigureServiceProvider(services =>
+            var hostApplicationBuilder = ConfigureHostApplicationBuilder(builder =>
             {
-                services
+                builder
                     .AddInfinityMessaging()
                         .ConfigureInMemoryBus()
                         .AddExceptionHandler(testExceptionHandler);
             });
 
             // Act
-            var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
+            var host = hostApplicationBuilder.Build();
+            var inMemoryBroker = host.Services.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
             var processErrorArgs = new ProcessErrorEventArgs(new Exception("Test"), "Test");
             var act = () => inMemoryBroker!.ProcessErrorAsync(processErrorArgs);
 
@@ -135,15 +139,18 @@ public class InMemoryBus : TestBase
             var testExceptionHandler1 = Substitute.For<TestExceptionHandler>(false);
             var testExceptionHandler2 = Substitute.For<TestExceptionHandler>(true);
 
-            var serviceProvider = ConfigureServiceProvider(
-                services => services
-                        .AddInfinityMessaging()
-                            .ConfigureInMemoryBus()
-                            .AddExceptionHandler(testExceptionHandler1)
-                            .AddExceptionHandler(testExceptionHandler2));
+            var hostApplicationBuilder = ConfigureHostApplicationBuilder(builder =>
+            {
+                builder
+                    .AddInfinityMessaging()
+                        .ConfigureInMemoryBus()
+                        .AddExceptionHandler(testExceptionHandler1)
+                        .AddExceptionHandler(testExceptionHandler2);
+            });
 
             // Act
-            var inMemoryBroker = serviceProvider.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
+            var host = hostApplicationBuilder.Build();
+            var inMemoryBroker = host.Services.GetRequiredService<IBroker>() as Messaging.InMemory.InMemoryBus;
             var processErrorArgs = new ProcessErrorEventArgs(new Exception("Test"), "Test");
             var task = () => inMemoryBroker!.ProcessErrorAsync(processErrorArgs);
             await task.Invoke();
