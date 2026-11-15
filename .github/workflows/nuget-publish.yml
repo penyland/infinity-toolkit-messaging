@@ -18,14 +18,19 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infinity-toolkit-messaging
     steps:
       - uses: actions/checkout@v7
+        with:
+          path: infinity-toolkit-messaging
         
       - uses: actions/checkout@v7
         with:
           repository: penyland/infinity-toolkit
           ref: main
-          path: ../infinity-toolkit
+          path: infinity-toolkit
       
       - name: Setup .NET 11
         uses: actions/setup-dotnet@v6
@@ -51,8 +56,8 @@ jobs:
           if-no-files-found: error
           retention-days: 7
           path: |
-            ./nupkgs/*.nupkg
-            ./nupkgs/*.snupkg
+            ./infinity-toolkit-messaging/nupkgs/*.nupkg
+            ./infinity-toolkit-messaging/nupkgs/*.snupkg
 
   publish-nuget:
     needs: build-and-test
