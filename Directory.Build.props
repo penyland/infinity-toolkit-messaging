@@ -5,6 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;NU1505</NoWarn>
     <RootNamespace>Infinity.Toolkit.Messaging</RootNamespace>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>

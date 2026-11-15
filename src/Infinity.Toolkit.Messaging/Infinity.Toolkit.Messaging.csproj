@@ -4,6 +4,7 @@
     <TargetFramework>net11.0</TargetFramework>
     <RootNamespace>Infinity.Toolkit.Messaging</RootNamespace>
     <VersionPrefix>1.3.0</VersionPrefix>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
