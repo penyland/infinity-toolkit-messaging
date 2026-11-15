@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Infinity.Toolkit.Azure" Version="1.1.7" />
+    <PackageReference Include="Infinity.Toolkit.Azure" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0" />
     <PackageReference Include="Microsoft.OpenApi" Version="3.11.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.21.0" />
